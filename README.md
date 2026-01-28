@@ -2,7 +2,7 @@
 
 **Ultra-thorough Claude Code skills for comprehensive project auditing.**
 
-These skills are designed to be **10x more picky** than standard audits. They don't sample—they check *everything*. They don't say "some issues found"—they give you exact counts and file locations. They don't leave stones unturned.
+These skills are designed to be **10x more picky** than standard audits. They don't sample—they check *everything*. They don't say "some issues found"—they give you exact counts and file locations. They don't leave stones unturned (manual edit: Of course they do. They absolutely will leave stones unturned because they are used non-deterministic systems that tend to look for easy ways out. Still, hopefully they'll make your apps better/safer/faster/nicer, just don't trust it yet.)
 
 ---
 
