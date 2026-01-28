@@ -58,7 +58,7 @@ Ultra-thorough performance audit skill covering:
 ## Directory Structure
 
 ```
-/Users/user/picky/
+/Users/user/picky-skills/
 ├── CLAUDE.md                    # This file
 ├── picky-design/
 │   ├── SKILL.md                 # Main skill instructions
@@ -116,10 +116,10 @@ Ultra-thorough performance audit skill covering:
 ## Installation
 
 Skills are symlinked to `~/.claude/skills/` for global availability:
-- `~/.claude/skills/picky-design` -> `/Users/user/picky/picky-design`
-- `~/.claude/skills/picky-security` -> `/Users/user/picky/picky-security`
-- `~/.claude/skills/picky-tester` -> `/Users/user/picky/picky-tester`
-- `~/.claude/skills/picky-performance` -> `/Users/user/picky/picky-performance`
+- `~/.claude/skills/picky-design` -> `/Users/user/picky-skills/picky-design`
+- `~/.claude/skills/picky-security` -> `/Users/user/picky-skills/picky-security`
+- `~/.claude/skills/picky-tester` -> `/Users/user/picky-skills/picky-tester`
+- `~/.claude/skills/picky-performance` -> `/Users/user/picky-skills/picky-performance`
 
 ## Key Philosophy
 
