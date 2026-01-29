@@ -1,67 +1,249 @@
-# Picky Skills Project
+# Picky Agents
 
-Ultra-thorough Claude Code skills for comprehensive project auditing.
+Ultra-thorough Claude Code **subagents** for comprehensive project auditing. 10x more thorough than standard audits.
 
-## Overview
+## What Makes Picky Agents Different
 
-This project contains four sophisticated audit skills designed to be 10x more thorough than standard audits:
+### Skills vs Subagents
 
-### picky-design
-Comprehensive design audit skill covering:
-- Visual consistency (typography, colors, spacing, borders, shadows, icons)
-- Component patterns (buttons, forms, cards, modals, states)
-- Accessibility (contrast, focus, ARIA, keyboard navigation)
-- Responsive design (breakpoints, touch targets, overflow)
-- UX best practices (feedback, hierarchy, anti-patterns)
-- Design system health (tokens, theming, documentation)
+This project evolved from **skills** (instructions injected into main context) to **subagents** (isolated agents with dedicated context). Here's why:
 
-**Trigger words**: "design audit", "UI audit", "accessibility audit", "picky design"
+| Aspect | Skills (Old) | Subagents (New) |
+|--------|--------------|-----------------|
+| Execution Context | Main conversation (dilutes over time) | **Isolated context window** |
+| Reliability | May need multiple starts | **Runs to completion** |
+| Tool Access | Inherits everything | **Explicitly restricted** |
+| Delegation | Manual keyword matching | **Automatic based on description** |
+| Resumability | None | **Can resume with full context** |
+| Model Control | Uses current model | **Can specify (Haiku/Sonnet/Opus)** |
+
+### The "Picky" Philosophy
+
+**Standard audit says:**
+- "Some buttons have inconsistent styling"
+- "Consider adding rate limiting"
+
+**Picky audit says:**
+- "47 buttons found. 3 variants defined. 12 instances use arbitrary colors: [file:line for each]"
+- "47 API endpoints found. 38 have auth. 9 unprotected: [complete list with CVSS scores]"
+
+**Core principles:**
+1. **Exhaustive** - Check EVERY item, not samples
+2. **Quantified** - Exact counts, not "some" or "several"
+3. **Located** - Every file:line reference
+4. **Actionable** - Specific fix for each finding
+5. **Prioritized** - Clear severity classification
+
+---
+
+## Available Agents
 
 ### picky-security
-Comprehensive security audit skill covering:
-- Frontend (XSS, DOM security, CSP, client-side data exposure)
-- Backend (SQL/NoSQL injection, command injection, SSRF, XXE)
-- Auth (JWT, OAuth, session management, IDOR, privilege escalation)
-- API (CORS, rate limiting, mass assignment, GraphQL)
-- Infrastructure (secrets, dependencies, security headers)
-- Data protection (encryption, PII, logging)
+**Paranoid security auditor** that assumes every line is vulnerable.
 
-**Trigger words**: "security audit", "vulnerability scan", "OWASP audit", "picky security"
+**Capabilities:**
+- OWASP Top 10 + CWE analysis with CVSS scores
+- Injection attacks (SQL, Command, XSS, SSRF, Path Traversal)
+- Auth flow completeness (brute force, lockout, reset, enumeration)
+- Secret scanning (code AND git history)
+- Dependency vulnerability audit
+- Security header and CORS analysis
+
+**Tools:** Read, Grep, Glob, Bash (read-only enforced via hook)
+**Model:** Sonnet
+
+**Automatic trigger:** Use proactively after code changes, before deployments, or when security is mentioned.
+
+### picky-design
+**Obsessive design system auditor** that catches every pixel deviation.
+
+**Capabilities:**
+- Color palette analysis (finds every hardcoded hex)
+- Typography scale verification
+- Spacing consistency audit
+- Component variant enforcement
+- WCAG accessibility compliance (Level A + AA)
+- Responsive pattern verification
+
+**Tools:** Read, Grep, Glob, Bash (read-only enforced via hook)
+**Model:** Sonnet
+
+**Automatic trigger:** Use proactively after UI changes or when design review is mentioned.
 
 ### picky-tester
-Black-box QA testing skill that behaves like a real user:
-- Tests every feature, button, and UI mode exhaustively
-- Uses Chrome DevTools MCP exclusively (no source code access)
-- Reports confusion points (novice user perspective)
-- Edge case and chaos testing (rapid clicks, special chars, boundaries)
-- Responsive testing across all viewports
-- Documents gaps that couldn't be tested
+**Black-box QA tester** that tests like a real user, not a developer.
 
-**Trigger words**: "test this app", "QA testing", "user testing", "picky test"
+**Capabilities:**
+- Full navigation testing
+- Form validation (valid, invalid, empty, edge cases)
+- Interactive element testing (buttons, modals, dropdowns)
+- Responsive testing (320px to 1920px)
+- Network error simulation
+- User confusion documentation
 
-**Core Philosophy**: "You are a real user, not a developer." Never reads source code, only interacts through the browser like an actual user would.
+**Tools:** Read, Bash (source code access BLOCKED - browser only)
+**Model:** Sonnet
+**Requires:** Chrome DevTools MCP server
+
+**Automatic trigger:** Use proactively after features are implemented or when testing is mentioned.
 
 ### picky-performance
-Ultra-thorough performance audit skill covering:
-- Frontend (bundle size, code splitting, images, fonts, CSS delivery)
-- Network & Caching (HTTP/2, compression, CDN, cache headers, resource hints)
-- Backend (API response times, database queries, N+1 detection, connection pooling)
-- Runtime (JavaScript execution, memory leaks, rendering, animations)
-- Infrastructure (load balancing, auto-scaling, CDN, serverless cold starts)
-- Mobile (touch performance, page weight budgets, offline support)
-- Core Web Vitals (LCP, INP, CLS, TTFB, FCP, TTI)
+**Obsessive performance engineer** who treats every wasted byte as a personal insult.
 
-**Trigger words**: "performance audit", "speed optimization", "Core Web Vitals", "picky performance"
+**Capabilities:**
+- Core Web Vitals measurement (LCP, INP, CLS, FCP, TTFB, TTI)
+- Bundle size analysis
+- Image/font optimization detection
+- Code splitting verification
+- Caching strategy audit
+- Mobile throttled testing (Slow 3G, 4x CPU)
 
-**Core Philosophy**: "Every millisecond matters. Every byte counts." Treats every wasted byte as a personal insult.
+**Tools:** Read, Grep, Glob, Bash (read-only enforced via hook)
+**Model:** Sonnet
+**Requires:** Chrome DevTools MCP server
+
+**Automatic trigger:** Use proactively before deployments or when performance is mentioned.
+
+### picky-orchestrator
+**Meta-agent** that coordinates comprehensive audits using all picky agents.
+
+**Capabilities:**
+- Project type detection
+- Optimal audit sequencing
+- Cross-cutting issue identification
+- Unified remediation roadmap
+- Priority matrix across all domains
+
+**Tools:** Read, Grep, Glob, Bash
+**Model:** Sonnet
+
+**Automatic trigger:** Use when "full audit", "comprehensive review", or "audit everything" is mentioned.
+
+---
+
+## Installation
+
+### Option 1: Symlink to User Agents (Recommended)
+
+```bash
+# Create user agents directory if it doesn't exist
+mkdir -p ~/.claude/agents
+
+# Symlink each agent
+ln -s /path/to/picky-skills/picky-security/agent.md ~/.claude/agents/picky-security.md
+ln -s /path/to/picky-skills/picky-design/agent.md ~/.claude/agents/picky-design.md
+ln -s /path/to/picky-skills/picky-tester/agent.md ~/.claude/agents/picky-tester.md
+ln -s /path/to/picky-skills/picky-performance/agent.md ~/.claude/agents/picky-performance.md
+ln -s /path/to/picky-skills/picky-orchestrator/agent.md ~/.claude/agents/picky-orchestrator.md
+```
+
+This makes agents available in ALL your projects.
+
+### Option 2: Project-Level Installation
+
+```bash
+# In your project root
+mkdir -p .claude/agents
+
+# Copy or symlink agents
+cp /path/to/picky-skills/picky-*/agent.md .claude/agents/
+```
+
+This makes agents available only in the current project.
+
+### Option 3: Skills Mode (Legacy)
+
+The original SKILL.md files are still available and can be used as skills:
+
+```bash
+# Symlink skills
+mkdir -p ~/.claude/skills
+ln -s /path/to/picky-skills/picky-security ~/.claude/skills/picky-security
+ln -s /path/to/picky-skills/picky-design ~/.claude/skills/picky-design
+ln -s /path/to/picky-skills/picky-tester ~/.claude/skills/picky-tester
+ln -s /path/to/picky-skills/picky-performance ~/.claude/skills/picky-performance
+```
+
+Note: Skills inject instructions into the main context. Agents run in isolated context.
+
+---
+
+## Usage
+
+### Automatic Delegation
+
+Claude automatically delegates based on context:
+
+```
+"Review this PR for security issues"
+→ Automatically invokes picky-security
+
+"Check the design consistency"
+→ Automatically invokes picky-design
+
+"Test the login flow"
+→ Automatically invokes picky-tester
+
+"Is this page fast enough?"
+→ Automatically invokes picky-performance
+
+"Audit everything before we launch"
+→ Automatically invokes picky-orchestrator
+```
+
+### Explicit Invocation
+
+You can also invoke agents directly:
+
+```
+"Use picky-security to audit authentication"
+"Have picky-design check the button consistency"
+"Run picky-tester on http://localhost:3000"
+"Use picky-performance to analyze bundle size"
+```
+
+### Parallel Execution
+
+For speed, run independent audits in parallel:
+
+```
+"Run picky-security and picky-performance in parallel"
+```
+
+### Background Execution
+
+Run audits in background while you continue working:
+
+```
+"Run picky-security in the background"
+```
+
+---
 
 ## Directory Structure
 
 ```
-/Users/user/picky-skills/
+picky-skills/
 ├── CLAUDE.md                    # This file
+├── picky-security/
+│   ├── agent.md                 # Subagent definition (NEW)
+│   ├── SKILL.md                 # Legacy skill instructions
+│   ├── references/
+│   │   ├── frontend-security.md
+│   │   ├── backend-security.md
+│   │   ├── auth-security.md
+│   │   ├── api-security.md
+│   │   ├── infrastructure-security.md
+│   │   ├── data-protection.md
+│   │   └── owasp-cwe-mapping.md
+│   ├── scripts/
+│   │   └── scan-secrets.sh
+│   └── examples/
+│       └── sample-report.md
+│
 ├── picky-design/
-│   ├── SKILL.md                 # Main skill instructions
+│   ├── agent.md                 # Subagent definition (NEW)
+│   ├── SKILL.md                 # Legacy skill instructions
 │   ├── references/
 │   │   ├── visual-consistency-checklist.md
 │   │   ├── component-patterns.md
@@ -72,23 +254,9 @@ Ultra-thorough performance audit skill covering:
 │   └── examples/
 │       └── sample-audit-report.md
 │
-├── picky-security/
-│   ├── SKILL.md                 # Main skill instructions
-│   ├── references/
-│   │   ├── frontend-security.md
-│   │   ├── backend-security.md
-│   │   ├── auth-security.md
-│   │   ├── api-security.md
-│   │   ├── infrastructure-security.md
-│   │   ├── data-protection.md
-│   │   └── owasp-cwe-mapping.md
-│   ├── scripts/
-│   │   └── scan-secrets.sh      # Comprehensive secret scanner
-│   └── examples/
-│       └── sample-report.md
-│
 ├── picky-tester/
-│   ├── SKILL.md                 # Main skill instructions
+│   ├── agent.md                 # Subagent definition (NEW)
+│   ├── SKILL.md                 # Legacy skill instructions
 │   ├── references/
 │   │   ├── form-testing.md
 │   │   ├── navigation-testing.md
@@ -99,87 +267,27 @@ Ultra-thorough performance audit skill covering:
 │   └── examples/
 │       └── sample-test-report.md
 │
-└── picky-performance/
-    ├── SKILL.md                 # Main skill instructions
-    ├── references/
-    │   ├── frontend-performance.md
-    │   ├── network-caching.md
-    │   ├── backend-performance.md
-    │   ├── infrastructure-performance.md
-    │   ├── runtime-performance.md
-    │   ├── mobile-performance.md
-    │   └── core-web-vitals.md
-    └── examples/
-        └── sample-report.md
+├── picky-performance/
+│   ├── agent.md                 # Subagent definition (NEW)
+│   ├── SKILL.md                 # Legacy skill instructions
+│   ├── references/
+│   │   ├── frontend-performance.md
+│   │   ├── network-caching.md
+│   │   ├── backend-performance.md
+│   │   ├── infrastructure-performance.md
+│   │   ├── runtime-performance.md
+│   │   ├── mobile-performance.md
+│   │   └── core-web-vitals.md
+│   └── examples/
+│       └── sample-report.md
+│
+└── picky-orchestrator/
+    └── agent.md                 # Meta-agent for coordinated audits (NEW)
 ```
 
-## Installation
-
-Skills are symlinked to `~/.claude/skills/` for global availability:
-- `~/.claude/skills/picky-design` -> `/Users/user/picky-skills/picky-design`
-- `~/.claude/skills/picky-security` -> `/Users/user/picky-skills/picky-security`
-- `~/.claude/skills/picky-tester` -> `/Users/user/picky-skills/picky-tester`
-- `~/.claude/skills/picky-performance` -> `/Users/user/picky-skills/picky-performance`
-
-## Key Philosophy
-
-### What makes these "10x more picky":
-
-**Standard audit says:**
-- "Some buttons have inconsistent styling"
-- "Consider adding rate limiting"
-
-**Picky audit says:**
-- "47 buttons found. 3 variants defined. 12 instances use arbitrary colors: [file:line for each]"
-- "47 API endpoints found. 38 have auth. 9 unprotected: [complete list with CVSS scores]"
-
-### Core principles:
-1. **Exhaustive** - Check EVERY item, not samples
-2. **Quantified** - Exact counts, not "some" or "several"
-3. **Located** - Every file:line reference
-4. **Actionable** - Specific fix for each finding
-5. **Prioritized** - Clear severity classification
-
-## Usage
-
-In any project, invoke with trigger keywords:
-
-```
-# Design Audit
-"Run a picky design audit on this project"
-"Do an accessibility audit"
-
-# Security Audit
-"Perform a security audit using picky-security"
-"Scan for vulnerabilities"
-
-# QA Testing
-"Test this app thoroughly"
-"Run picky-tester on http://localhost:3000"
-"Do user testing on this feature"
-
-# Performance Audit
-"Run a performance audit on this project"
-"Analyze Core Web Vitals"
-"Optimize page load time"
-"Check for performance issues"
-```
-
-### picky-tester Requirements
-- **Chrome DevTools MCP must be installed and running**
-- The skill will check for availability and prompt installation if missing
-- Works with any localhost or accessible URL
-- Generates comprehensive test reports with screenshots
+---
 
 ## Severity Classifications
-
-### Design Findings
-| Severity | Criteria |
-|----------|----------|
-| Critical | Blocks users, WCAG Level A failures |
-| Major | Significant inconsistency, WCAG Level AA failures |
-| Minor | Noticeable deviation from patterns |
-| Suggestion | Enhancement opportunities |
 
 ### Security Findings
 | Severity | CVSS | Criteria |
@@ -189,35 +297,62 @@ In any project, invoke with trigger keywords:
 | Medium | 4.0-6.9 | CSRF, info disclosure |
 | Low | 0.1-3.9 | Missing headers, verbose errors |
 
+### Design Findings
+| Severity | Criteria |
+|----------|----------|
+| Critical | Blocks users, WCAG Level A failures |
+| Major | Significant inconsistency, WCAG Level AA failures |
+| Minor | Noticeable deviation from patterns |
+| Suggestion | Enhancement opportunities |
+
 ### Tester Findings
 | Severity | Criteria |
 |----------|----------|
-| Critical | Blocks core functionality, app crashes, data loss |
-| High | Significant UX issues, major features broken |
-| Medium | Minor bugs, usability friction |
-| Low | Polish issues, enhancement suggestions |
-
-### Confusion Points (picky-tester specific)
-| Severity | Criteria |
-|----------|----------|
-| Critical | User cannot accomplish goal |
-| Major | User must experiment or guess |
-| Minor | User might pause or wonder |
-| Note | Best practice improvement |
+| Blocker | Feature completely broken, app crashes |
+| Critical | Major feature broken, data loss |
+| Major | Feature partially broken, workaround exists |
+| Minor | Visual issue, slow but works |
+| UX Issue | Works but confusing |
 
 ### Performance Findings
-| Severity | Impact | Criteria |
-|----------|--------|----------|
-| Critical | > 1s added load time | Render-blocking 500KB bundle, N+1 queries, no caching |
-| High | 200ms - 1s impact | Unoptimized images, missing code splitting, API waterfalls |
-| Medium | 50ms - 200ms impact | Missing compression, suboptimal cache headers |
-| Low | < 50ms impact | Missing resource hints, minor optimizations |
+| Severity | Impact |
+|----------|--------|
+| Critical | > 1s added load time |
+| High | 200ms - 1s impact |
+| Medium | 50ms - 200ms impact |
+| Low | < 50ms impact |
+
+---
+
+## Dependencies
+
+### Required for all agents:
+- Claude Code CLI
+
+### Required for picky-tester and picky-performance:
+- [Chrome DevTools MCP](https://github.com/anthropics/anthropic-quickstarts/tree/main/mcp-server-chrome-devtools)
+
+---
+
+## Comparison with Other Subagents
+
+| Feature | Picky Agents | VoltAgent/awesome-claude-code-subagents |
+|---------|--------------|----------------------------------------|
+| **Methodology Depth** | 600+ lines per domain, detailed checklists | Generic role descriptions |
+| **Scan Commands** | 100+ specific grep/find patterns | None provided |
+| **Reference Docs** | OWASP/CWE mapping, WCAG checklists | None |
+| **Tool Restrictions** | Read-only enforced via hooks | Basic tool lists |
+| **Proactive Usage** | Built into descriptions | Must add manually |
+| **Skills Integration** | Loads detailed skill content | N/A |
+| **Cross-Domain** | Orchestrator for unified audits | No coordination |
+
+---
 
 ## Maintenance
 
 ### Adding new checks:
 1. Add items to appropriate reference file
-2. Include scan commands where applicable
+2. Update scan commands in agent.md
 3. Update SKILL.md if adding new categories
 
 ### Updating OWASP/CWE references:
@@ -226,27 +361,18 @@ In any project, invoke with trigger keywords:
 ### Secret scanner patterns:
 - Edit `picky-security/scripts/scan-secrets.sh`
 
-### Adding new test cases:
-- Edit appropriate file in `picky-tester/references/`
-- Form inputs: `form-testing.md`
-- Navigation flows: `navigation-testing.md`
-- UI components: `interaction-testing.md`
-- UX clarity: `user-confusion-testing.md`
-- Edge cases: `edge-case-testing.md`
-- Viewport sizes: `responsive-testing.md`
+---
 
-### Adding new performance checks:
-- Edit appropriate file in `picky-performance/references/`
-- Frontend: `frontend-performance.md`
-- Network/Caching: `network-caching.md`
-- Backend: `backend-performance.md`
-- Infrastructure: `infrastructure-performance.md`
-- Runtime: `runtime-performance.md`
-- Mobile: `mobile-performance.md`
-- Core Web Vitals: `core-web-vitals.md`
+## Changelog
 
-## Created
-2025-01-27
+### 2025-01-29
+- **MAJOR**: Converted all skills to subagents for improved reliability
+- Added agent.md files with YAML frontmatter
+- Added PreToolUse hooks for read-only enforcement
+- Added picky-orchestrator meta-agent
+- Added proactive usage in descriptions
+- Improved tool restrictions
+- Added skills injection for methodology content
 
-## Last Updated
-2025-01-27
+### 2025-01-27
+- Initial release with skill-based architecture
