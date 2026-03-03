@@ -11,6 +11,55 @@ model: sonnet
 permissionMode: dontAsk
 skills:
   - picky-tester
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: |
+            #!/bin/bash
+            if ! command -v jq &>/dev/null; then
+              echo "BLOCKED: jq is required for read-only enforcement. Install jq first." >&2
+              exit 2
+            fi
+            INPUT=$(cat)
+            CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+            # Block write operations - this is a READ-ONLY audit
+            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bchmod\b|\bchown\b|\bsudo\b|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b|\btee\b|\bsed\s+-i\b' > /dev/null; then
+              echo "Blocked: Tester audit is read-only. Cannot modify files." >&2
+              exit 2
+            fi
+            exit 0
+    - matcher: "Read"
+      hooks:
+        - type: command
+          command: |
+            #!/bin/bash
+            if ! command -v jq &>/dev/null; then
+              echo "BLOCKED: jq is required for read-only enforcement. Install jq first." >&2
+              exit 2
+            fi
+            INPUT=$(cat)
+            FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+            # Allow config/meta files that don't contain application source code
+            if echo "$FILE" | grep -iE '\.(json|yaml|yml|toml|ini|cfg|conf|config|env\.example|md|txt|lock|csv|xml|html|css|scss|svg)$' > /dev/null; then
+              exit 0
+            fi
+            # Allow dotfiles and config directories
+            if echo "$FILE" | grep -iE '(^|/)\.' > /dev/null; then
+              exit 0
+            fi
+            # Allow known config files by name
+            if echo "$FILE" | grep -iE '(Dockerfile|Makefile|Procfile|Gemfile|Rakefile|LICENSE|CHANGELOG|CONTRIBUTING|README)$' > /dev/null; then
+              exit 0
+            fi
+            # Block source code files - tester should not read application source
+            if echo "$FILE" | grep -iE '\.(ts|tsx|js|jsx|py|go|rs|java|rb|php|swift|kt|scala|c|cpp|h|hpp|cs|lua|pl|pm|sh|bash|zsh|ex|exs|erl|hs|ml|clj|dart|r|jl|v|vhdl|zig|nim|cr|elm)$' > /dev/null; then
+              echo "Blocked: Tester agent cannot read source code. Test like a real user using the browser only." >&2
+              exit 2
+            fi
+            # Default allow for unrecognized extensions (images, binaries, etc.)
+            exit 0
 ---
 
 # Picky Tester Agent
@@ -414,9 +463,9 @@ mcp__chrome-devtools__list_network_requests
 
 ## Collaboration Protocol
 
-- **Hand off to debugger** for reproducing complex bugs
-- **Escalate to accessibility-tester** for comprehensive a11y audit
-- **Coordinate with performance-engineer** for speed-related issues
+- **Hand off to picky-security** for reproducing security-related bugs
+- **Escalate to picky-design** for comprehensive accessibility audit
+- **Coordinate with picky-performance** for speed-related issues
 
 ## Completion Checklist
 

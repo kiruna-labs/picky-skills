@@ -17,10 +17,14 @@ hooks:
         - type: command
           command: |
             #!/bin/bash
+            if ! command -v jq &>/dev/null; then
+              echo "BLOCKED: jq is required for read-only enforcement. Install jq first." >&2
+              exit 2
+            fi
             INPUT=$(cat)
             CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
             # Block write operations - this is a READ-ONLY audit
-            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b' > /dev/null; then
+            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bchmod\b|\bchown\b|\bsudo\b|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b|\btee\b|\bsed\s+-i\b' > /dev/null; then
               echo "Blocked: Design audit is read-only. Cannot modify files." >&2
               exit 2
             fi
@@ -78,7 +82,7 @@ find . -name "*.tsx" -o -name "*.jsx" 2>/dev/null | grep -v node_modules | wc -l
 
 ```bash
 # Hex colors (including in Tailwind arbitrary values)
-grep -rohn "#[0-9a-fA-F]\{3,8\}" --include="*.tsx" --include="*.jsx" --include="*.css" --include="*.scss" 2>/dev/null | sort | uniq -c | sort -rn
+grep -ron "#[0-9a-fA-F]\{3,8\}" --include="*.tsx" --include="*.jsx" --include="*.css" --include="*.scss" 2>/dev/null | sort | uniq -c | sort -rn
 
 # RGB/RGBA/HSL
 grep -rn "rgb\|rgba\|hsl" --include="*.tsx" --include="*.jsx" --include="*.css" 2>/dev/null | head -50
@@ -99,13 +103,13 @@ grep -rn "color:\s*\(red\|blue\|green\|black\|white\|gray\|grey\)" --include="*.
 
 ```bash
 # Font sizes
-grep -rohn "font-size:\s*[^;]*\|text-\[[^\]]*\]" --include="*.css" --include="*.tsx" 2>/dev/null | sort | uniq -c | sort -rn
+grep -ron "font-size:\s*[^;]*\|text-\[[^\]]*\]" --include="*.css" --include="*.tsx" 2>/dev/null | sort | uniq -c | sort -rn
 
 # Font weights
-grep -rohn "font-weight:\s*[^;]*\|font-\(bold\|semibold\|medium\|normal\|light\)" --include="*.css" --include="*.tsx" 2>/dev/null | sort | uniq -c | sort -rn
+grep -ron "font-weight:\s*[^;]*\|font-\(bold\|semibold\|medium\|normal\|light\)" --include="*.css" --include="*.tsx" 2>/dev/null | sort | uniq -c | sort -rn
 
 # Line heights
-grep -rohn "line-height:\s*[^;]*\|leading-" --include="*.css" --include="*.tsx" 2>/dev/null | sort | uniq -c | sort -rn
+grep -ron "line-height:\s*[^;]*\|leading-" --include="*.css" --include="*.tsx" 2>/dev/null | sort | uniq -c | sort -rn
 
 # Font families
 grep -rn "font-family" --include="*.css" --include="*.tsx" 2>/dev/null
@@ -120,7 +124,7 @@ grep -rn "font-family" --include="*.css" --include="*.tsx" 2>/dev/null
 
 ```bash
 # Margin/padding values
-grep -rohn "margin:\s*[^;]*\|padding:\s*[^;]*" --include="*.css" 2>/dev/null | sort | uniq -c | sort -rn | head -30
+grep -ron "margin:\s*[^;]*\|padding:\s*[^;]*" --include="*.css" 2>/dev/null | sort | uniq -c | sort -rn | head -30
 
 # Tailwind arbitrary spacing
 grep -rn "p-\[\|m-\[\|gap-\[\|space-\[" --include="*.tsx" --include="*.jsx" 2>/dev/null
@@ -278,9 +282,9 @@ grep -rn "#1a1a1a" --include="*.tsx"
 
 ## Collaboration Protocol
 
-- **Escalate to accessibility-tester** for WCAG compliance verification
-- **Coordinate with ui-designer** for design system decisions
-- **Align with frontend-developer** for implementation patterns
+- **Escalate to picky-tester** for WCAG compliance verification via browser testing
+- **Coordinate with picky-performance** for CSS/font optimization tradeoffs
+- **Align with picky-orchestrator** for cross-domain design consistency
 
 ## Completion Checklist
 

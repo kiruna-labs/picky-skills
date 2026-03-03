@@ -9,7 +9,7 @@ description: |
 tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 disallowedTools: Edit, Write, NotebookEdit
 model: sonnet
-permissionMode: bypassPermissions
+permissionMode: dontAsk
 skills:
   - picky-landingpage
 hooks:
@@ -19,10 +19,14 @@ hooks:
         - type: command
           command: |
             #!/bin/bash
+            if ! command -v jq &>/dev/null; then
+              echo "BLOCKED: jq is required for read-only enforcement. Install jq first." >&2
+              exit 2
+            fi
             INPUT=$(cat)
             CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
             # Block write operations - this is a READ-ONLY audit
-            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b' > /dev/null; then
+            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bchmod\b|\bchown\b|\bsudo\b|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b|\btee\b|\bsed\s+-i\b' > /dev/null; then
               echo "Blocked: Landing page audit is read-only. Cannot modify files." >&2
               exit 2
             fi

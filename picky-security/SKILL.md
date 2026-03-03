@@ -517,7 +517,7 @@ grep -rn "debug.*=.*true\|debug.*query\|debug.*param" --include="*.ts" --include
 1. Exact file path and line number
 2. Vulnerable code snippet
 3. Proof of concept (how to exploit)
-4. OWASP category (e.g., A03:2021)
+4. OWASP category (e.g., A05:2025)
 5. CWE identifier (e.g., CWE-89)
 6. CVSS score estimate
 7. Remediation with secure code example

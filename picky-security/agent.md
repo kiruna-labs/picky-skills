@@ -17,10 +17,14 @@ hooks:
         - type: command
           command: |
             #!/bin/bash
+            if ! command -v jq &>/dev/null; then
+              echo "BLOCKED: jq is required for read-only enforcement. Install jq first." >&2
+              exit 2
+            fi
             INPUT=$(cat)
             CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
             # Block any write/modify operations - this is a READ-ONLY audit
-            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bchmod\b|\bchown\b|\bsudo\b|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b' > /dev/null; then
+            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bchmod\b|\bchown\b|\bsudo\b|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b|\btee\b|\bsed\s+-i\b' > /dev/null; then
               echo "Blocked: Security audit is read-only. Cannot modify files or system." >&2
               exit 2
             fi
@@ -147,7 +151,7 @@ Every finding MUST include:
 ### [SEVERITY] Finding Title
 
 **CWE**: CWE-XXX (Name)
-**OWASP**: A0X:2021 (Category)
+**OWASP**: A0X:2025 (Category)
 **CVSS**: X.X (Vector String)
 
 **Location**: `file/path.ts:123`
@@ -184,9 +188,9 @@ Every finding MUST include:
 ## Collaboration Protocol
 
 When findings require deeper investigation:
-- **Escalate to penetration-tester** for exploit development
-- **Coordinate with architect-reviewer** for systemic issues
-- **Align with compliance-auditor** for regulatory implications
+- **Escalate to picky-tester** for black-box exploit verification
+- **Coordinate with picky-performance** for denial-of-service risks
+- **Align with picky-orchestrator** for cross-domain security implications
 
 ## Completion Checklist
 

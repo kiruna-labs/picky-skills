@@ -6,10 +6,10 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 
 ---
 
-## OWASP Top 10 (2021)
+## OWASP Top 10 (2025)
 
-### A01:2021 - Broken Access Control
-**Moved up from #5. 94% of applications tested.**
+### A01:2025 - Broken Access Control
+**Remains #1. Now absorbs SSRF (previously A10:2021).**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -20,9 +20,39 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | CORS Misconfiguration | CWE-942 | Overly permissive cross-origin |
 | Forced Browsing | CWE-425 | Accessing unlinked pages |
 | JWT Token Manipulation | CWE-284 | Modifying token claims |
+| SSRF | CWE-918 | Server makes request to attacker-controlled URL |
+| Cloud Metadata Access | CWE-918 | Accessing 169.254.169.254 |
+| Internal Service Access | CWE-918 | Accessing internal APIs |
 
-### A02:2021 - Cryptographic Failures
-**Previously "Sensitive Data Exposure"**
+### A02:2025 - Security Misconfiguration
+**Moved up from #5 in 2021. Includes XXE.**
+
+| Vulnerability | CWE | Description |
+|--------------|-----|-------------|
+| Default Credentials | CWE-1188 | Unchanged default passwords |
+| Debug Enabled in Prod | CWE-489 | Debug features exposed |
+| Missing Security Headers | CWE-693 | No CSP, HSTS, etc. |
+| Verbose Errors | CWE-209 | Stack traces exposed |
+| XXE | CWE-611 | XML external entity |
+| Open Cloud Storage | CWE-284 | Public S3 buckets |
+| Directory Listing | CWE-548 | Index of exposed |
+| Unnecessary Features | CWE-1188 | Unused services enabled |
+
+### A03:2025 - Software Supply Chain Failures
+**New in 2025. Expanded from A06:2021 "Vulnerable Components" to cover full supply chain.**
+
+| Vulnerability | CWE | Description |
+|--------------|-----|-------------|
+| Known Vulnerable Dependency | CWE-1395 | Outdated packages with known CVEs |
+| Unmaintained Component | CWE-1104 | Abandoned libraries |
+| Non-Updateable Component | CWE-1329 | Dependency that cannot be updated |
+| Insufficiently Trustworthy Component | CWE-1357 | Unvetted or suspicious packages |
+| Obsolete Function Usage | CWE-477 | Using deprecated/obsolete functions |
+| Compromised Build Pipeline | CWE-829 | Malicious changes in CI/CD or distribution |
+| Component Without License | N/A | Legal/security risk |
+
+### A04:2025 - Cryptographic Failures
+**Moved down from #2 in 2021.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -34,8 +64,8 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | Hardcoded Credentials | CWE-798 | Secrets in source code |
 | Weak Key Generation | CWE-326 | Insufficient key size |
 
-### A03:2021 - Injection
-**Includes XSS now**
+### A05:2025 - Injection
+**Moved down from #3 in 2021. Includes XSS.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -51,8 +81,8 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | Header Injection | CWE-113 | HTTP header injection |
 | Log Injection | CWE-117 | Log entry injection |
 
-### A04:2021 - Insecure Design
-**New category for design flaws**
+### A06:2025 - Insecure Design
+**Moved down from #4 in 2021.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -61,31 +91,8 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | Trust Boundary Violation | CWE-501 | Mixing trusted/untrusted |
 | Missing Threat Model | CWE-1059 | No security requirements |
 
-### A05:2021 - Security Misconfiguration
-**Includes XXE now**
-
-| Vulnerability | CWE | Description |
-|--------------|-----|-------------|
-| Default Credentials | CWE-1188 | Unchanged default passwords |
-| Debug Enabled in Prod | CWE-489 | Debug features exposed |
-| Missing Security Headers | CWE-693 | No CSP, HSTS, etc. |
-| Verbose Errors | CWE-209 | Stack traces exposed |
-| XXE | CWE-611 | XML external entity |
-| Open Cloud Storage | CWE-284 | Public S3 buckets |
-| Directory Listing | CWE-548 | Index of exposed |
-| Unnecessary Features | CWE-1188 | Unused services enabled |
-
-### A06:2021 - Vulnerable Components
-**Previously #9**
-
-| Vulnerability | CWE | Description |
-|--------------|-----|-------------|
-| Known Vulnerable Dependency | CWE-1395 | Outdated packages |
-| Unmaintained Component | CWE-1104 | Abandoned libraries |
-| Component Without License | N/A | Legal/security risk |
-
-### A07:2021 - Identification & Authentication Failures
-**Previously "Broken Authentication"**
+### A07:2025 - Authentication Failures
+**Renamed from "Identification & Authentication Failures" in 2021.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -97,8 +104,8 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | Session Not Invalidated | CWE-613 | Logout doesn't work |
 | Exposed Session Tokens | CWE-598 | Tokens in URLs |
 
-### A08:2021 - Software and Data Integrity Failures
-**New, includes Insecure Deserialization**
+### A08:2025 - Software or Data Integrity Failures
+**Same position as 2021. Includes Insecure Deserialization.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -108,8 +115,8 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | Unsigned Updates | CWE-494 | Missing code signing |
 | SRI Missing | CWE-353 | No subresource integrity |
 
-### A09:2021 - Security Logging & Monitoring Failures
-**Previously #10**
+### A09:2025 - Security Logging & Alerting Failures
+**Renamed from "Monitoring" to "Alerting" to emphasize active alerting.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
@@ -118,14 +125,23 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 | Sensitive Data in Logs | CWE-532 | PII/credentials logged |
 | Missing Alerting | CWE-223 | No security alerts |
 
-### A10:2021 - Server-Side Request Forgery (SSRF)
-**New entry**
+### A10:2025 - Mishandling of Exceptional Conditions
+**New in 2025. 24 CWEs covering improper error handling, failing open, and logic errors.**
 
 | Vulnerability | CWE | Description |
 |--------------|-----|-------------|
-| SSRF | CWE-918 | Server makes request to attacker-controlled URL |
-| Cloud Metadata Access | CWE-918 | Accessing 169.254.169.254 |
-| Internal Service Access | CWE-918 | Accessing internal APIs |
+| Sensitive Error Messages | CWE-209 | Error messages leak sensitive info |
+| Debug Info Exposure | CWE-215 | Sensitive info in debugging code |
+| Uncaught Exception | CWE-248 | Unhandled exceptions crash or leak |
+| Unchecked Return Value | CWE-252 | Ignoring function return values |
+| NULL Pointer Dereference | CWE-476 | Crash on null reference |
+| Failing Open | CWE-636 | Security bypass on error conditions |
+| Improper Exception Handling | CWE-703 | Catch-all or missing exception handling |
+| Missing Parameter Handling | CWE-234 | No handling for missing input |
+| Insufficient Privilege Handling | CWE-274 | Improper handling of insufficient privileges |
+| Divide By Zero | CWE-369 | Unguarded division operations |
+| Missing Default Case | CWE-478 | Switch without default case |
+| Generic Exception Catching | CWE-396 | Overly broad catch blocks |
 
 ---
 
@@ -286,7 +302,7 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 
 **Severity**: [Critical/High/Medium/Low]
 **CVSS Score**: X.X
-**OWASP Category**: [A01:2021 - Broken Access Control]
+**OWASP Category**: [A01:2025 - Broken Access Control]
 **CWE**: [CWE-XXX - Name]
 
 **Description**:
@@ -318,7 +334,7 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 ## External References
 
 ### OWASP
-- [OWASP Top 10 2021](https://owasp.org/Top10/)
+- [OWASP Top 10 2025](https://owasp.org/Top10/2025/)
 - [OWASP API Security Top 10 2023](https://owasp.org/API-Security/)
 - [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/)
 - [OWASP Cheat Sheets](https://cheatsheetseries.owasp.org/)
@@ -334,3 +350,23 @@ This document maps common vulnerabilities to their OWASP and CWE identifiers for
 ### Scoring
 - [CVSS Calculator](https://www.first.org/cvss/calculator/3.1)
 - [CVSS Specification](https://www.first.org/cvss/specification-document)
+
+---
+
+## Legacy: OWASP Top 10 2021 Mapping
+
+This appendix preserves the 2021 category mapping for reference when reviewing older reports or codebases audited against the 2021 standard.
+
+| 2021 Category | 2025 Equivalent | Notes |
+|---------------|-----------------|-------|
+| A01:2021 - Broken Access Control | A01:2025 - Broken Access Control | Now also includes SSRF |
+| A02:2021 - Cryptographic Failures | A04:2025 - Cryptographic Failures | Moved to #4 |
+| A03:2021 - Injection | A05:2025 - Injection | Moved to #5 |
+| A04:2021 - Insecure Design | A06:2025 - Insecure Design | Moved to #6 |
+| A05:2021 - Security Misconfiguration | A02:2025 - Security Misconfiguration | Moved up to #2 |
+| A06:2021 - Vulnerable Components | A03:2025 - Software Supply Chain Failures | Expanded scope, moved to #3 |
+| A07:2021 - Identification & Authentication Failures | A07:2025 - Authentication Failures | Renamed |
+| A08:2021 - Software and Data Integrity Failures | A08:2025 - Software or Data Integrity Failures | Minor rename ("and" → "or") |
+| A09:2021 - Security Logging & Monitoring Failures | A09:2025 - Security Logging & Alerting Failures | "Monitoring" → "Alerting" |
+| A10:2021 - Server-Side Request Forgery (SSRF) | Merged into A01:2025 | SSRF absorbed into Broken Access Control |
+| N/A | A10:2025 - Mishandling of Exceptional Conditions | New category in 2025 |

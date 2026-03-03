@@ -5,7 +5,8 @@
 Most audits sample a few files and say "some issues found." Picky skills check *every* component, *every* endpoint, *every* pixel — and give you exact counts, exact `file:line` locations, and exact fixes.
 
 ```bash
-npx skills add kiruna-labs/picky-skills
+git clone https://github.com/kiruna-labs/picky-skills.git ~/picky-skills
+cd ~/picky-skills && ./install.sh
 ```
 
 Then in Claude Code:
@@ -78,32 +79,16 @@ Every finding follows five rules:
 
 ## Installation
 
-### Option 1: Skills CLI (recommended)
-
-```bash
-# All skills
-npx skills add kiruna-labs/picky-skills
-
-# Individual skill
-npx skills add kiruna-labs/picky-skills --skill picky-security
-
-# Global (all projects)
-npx skills add kiruna-labs/picky-skills -g
-
-# Specific agent
-npx skills add kiruna-labs/picky-skills -a claude-code
-```
-
-### Option 2: Install script
+### Option 1: Install script
 
 ```bash
 git clone https://github.com/kiruna-labs/picky-skills.git ~/picky-skills
 cd ~/picky-skills && ./install.sh
 ```
 
-Auto-detects your agent (Claude Code, Cursor, Kiro, OpenCode) and installs to the right location.
+Auto-detects your agent (Claude Code, Cursor, Kiro) and installs to the right location.
 
-### Option 3: As subagents (manual)
+### Option 2: As subagents (manual)
 
 Subagents run in an isolated context window with read-only enforcement — recommended for thorough audits.
 
@@ -114,9 +99,10 @@ ln -s ~/picky-skills/picky-design/agent.md ~/.claude/agents/picky-design.md
 ln -s ~/picky-skills/picky-tester/agent.md ~/.claude/agents/picky-tester.md
 ln -s ~/picky-skills/picky-performance/agent.md ~/.claude/agents/picky-performance.md
 ln -s ~/picky-skills/picky-orchestrator/agent.md ~/.claude/agents/picky-orchestrator.md
+ln -s ~/picky-skills/picky-landingpage/agent.md ~/.claude/agents/picky-landingpage.md
 ```
 
-### Option 4: As skills (manual)
+### Option 3: As skills (manual)
 
 Skills inject into the main conversation context — good for quick checks.
 
@@ -194,6 +180,7 @@ Subagents are recommended. Skills work for quick checks.
 ## Requirements
 
 - **All skills:** Claude Code (or compatible agent)
+- **jq** (required for read-only enforcement in agent hooks)
 - **picky-tester, picky-performance, picky-landingpage:** [Chrome DevTools MCP](https://github.com/anthropics/anthropic-quickstarts/tree/main/mcp-server-chrome-devtools)
 
 ---
@@ -203,6 +190,16 @@ Subagents are recommended. Skills work for quick checks.
 These skills run inside non-deterministic AI agents. While the instructions push for exhaustive coverage, very large codebases (>1000 files) may need scoped passes, complex multi-file patterns may be missed, and security findings are not a substitute for professional pen testing. Agent results vary between runs — re-run for higher confidence.
 
 Found a gap? [Open an issue.](https://github.com/kiruna-labs/picky-skills/issues)
+
+---
+
+## Security Model
+
+Read-only enforcement uses two layers:
+1. **`disallowedTools`** (primary) — Prevents agents from using Write, Edit, and NotebookEdit tools entirely
+2. **PreToolUse hooks** (defense-in-depth) — Pattern-matches Bash commands to block destructive operations like `rm`, `mv`, `git push`, etc.
+
+**Limitations:** Hook-based blocking is pattern-based and best-effort. Commands using indirect execution (e.g., `python -c`, `node -e`, `curl -o`) may bypass pattern matching. The `disallowedTools` restriction is the primary safety mechanism.
 
 ---
 

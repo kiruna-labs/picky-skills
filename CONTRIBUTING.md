@@ -18,7 +18,7 @@ The most common contribution. Example: adding "orphaned CSS classes" to `picky-d
 
 3. **Update the example report** in `examples/` to show the new check's output.
 
-4. Don't update `SKILL.md` or `agent.md` unless adding an entirely new category.
+4. Coordinate with maintainers before modifying `SKILL.md` or `agent.md` directly. Contributions should add new checks to reference files; maintainers will integrate them into the skill and agent definitions.
 
 ### Adding a New Skill
 
@@ -42,7 +42,7 @@ description: One sentence. Include trigger phrases.
 ---
 ```
 
-Keep SKILL.md under 500 lines. Put detailed checklists in `references/`.
+Keep SKILL.md focused and well-organized. If a skill exceeds ~800 lines, consider splitting reference material into separate files in the `references/` directory.
 
 ### Fixing False Positives
 

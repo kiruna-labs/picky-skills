@@ -18,10 +18,14 @@ hooks:
         - type: command
           command: |
             #!/bin/bash
+            if ! command -v jq &>/dev/null; then
+              echo "BLOCKED: jq is required for read-only enforcement. Install jq first." >&2
+              exit 2
+            fi
             INPUT=$(cat)
             CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
             # Block write operations - read-only audit
-            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b' > /dev/null; then
+            if echo "$CMD" | grep -iE '\brm\b|\bmv\b|\bcp\b|\s>\s|\s>>|\bchmod\b|\bchown\b|\bsudo\b|\bnpm install\b|\byarn add\b|\bgit push\b|\bgit commit\b|\btee\b|\bsed\s+-i\b' > /dev/null; then
               echo "Blocked: Performance audit is read-only. Cannot modify files." >&2
               exit 2
             fi
@@ -383,9 +387,9 @@ Check:
 
 ## Collaboration Protocol
 
-- **Escalate to database-optimizer** for query performance
-- **Coordinate with infrastructure-engineer** for CDN/caching
-- **Align with frontend-developer** for bundle optimization
+- **Escalate to picky-security** for denial-of-service and resource exhaustion risks
+- **Coordinate with picky-design** for image/font/CSS optimization tradeoffs
+- **Align with picky-orchestrator** for cross-domain performance implications
 
 ## Completion Checklist
 

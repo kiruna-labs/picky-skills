@@ -124,12 +124,12 @@ Each tester represents a distinct user persona with different priorities, viewpo
 3. Try to understand what the app does from visible UI
 4. Look for any value proposition, tagline, or onboarding
 5. Click every visible button/link in the header
-6. Try adding a location (click LOCATIONS +)
-7. Search for a city and select it
+6. Try the primary creation action (e.g., "Add Item", "New Entry", or "+" button)
+7. Search for or select an item and confirm the selection
 8. Screenshot after adding — check for layout breakage
-9. Switch between List and Table views
-10. Try to create a page (find and click + button)
-11. Check if snow data appears for ski resorts
+9. Switch between available view modes (e.g., list, grid, table)
+10. Try to create a new resource (find and click + or "Create" button)
+11. Check if dynamic data loads and displays correctly
 ```
 
 #### T02: Priya — Power User
@@ -272,10 +272,10 @@ Each tester represents a distinct user persona with different priorities, viewpo
 #### T13: Omar — Chaos Monkey
 ```
 1. Rapidly click buttons — check for double-submissions
-2. Add and immediately remove locations
-3. Try to create recipes with empty/invalid data
+2. Add and immediately remove items
+3. Try to create entries with empty/invalid data
 4. Test search with very long strings
-5. Test with emoji in location search
+5. Test with emoji in search inputs
 6. Rapidly switch between List/Table view
 7. Open multiple dropdowns simultaneously
 8. Try to break the app with unexpected interactions

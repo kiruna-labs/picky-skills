@@ -155,6 +155,7 @@ ln -s /path/to/picky-skills/picky-design/agent.md ~/.claude/agents/picky-design.
 ln -s /path/to/picky-skills/picky-tester/agent.md ~/.claude/agents/picky-tester.md
 ln -s /path/to/picky-skills/picky-performance/agent.md ~/.claude/agents/picky-performance.md
 ln -s /path/to/picky-skills/picky-orchestrator/agent.md ~/.claude/agents/picky-orchestrator.md
+ln -s /path/to/picky-skills/picky-landingpage/agent.md ~/.claude/agents/picky-landingpage.md
 ```
 
 This makes agents available in ALL your projects.
@@ -307,7 +308,8 @@ picky-skills/
 │       └── sample-report.md
 │
 ├── picky-landingpage/
-│   ├── SKILL.md                 # Skill instructions (no agent.md yet)
+│   ├── agent.md                 # Subagent definition
+│   ├── SKILL.md                 # Skill instructions
 │   ├── references/
 │   │   ├── conversion-framework.md
 │   │   ├── hero-optimization.md
@@ -433,6 +435,19 @@ This enables unified priority matrices in orchestrated audit reports.
 ---
 
 ## Changelog
+
+### 2026-03-02
+- Fixed jq dependency check in all PreToolUse hooks (fail-closed instead of fail-open)
+- Added PreToolUse hooks to picky-tester and picky-orchestrator
+- Normalized hook blocklists across all 6 agents (added tee, sed -i, chmod, chown, sudo)
+- Changed picky-landingpage permissionMode from bypassPermissions to dontAsk
+- Updated OWASP references from 2021 to 2025
+- Removed project-specific content from picky-tester SKILL.md
+- Fixed README and CONTRIBUTING inaccuracies
+- Added CHANGELOG.md
+- Removed references to non-existent phantom agents
+- Added read-only enforcement limitations documentation
+- Fixed grep -rohn to grep -ron in picky-design
 
 ### 2026-03-01
 - Added picky-landingpage skill for landing page conversion auditing

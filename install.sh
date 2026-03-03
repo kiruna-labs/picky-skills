@@ -3,7 +3,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILLS=("picky-design" "picky-security" "picky-tester" "picky-performance" "picky-landingpage")
-AGENTS=("picky-design" "picky-security" "picky-tester" "picky-performance" "picky-orchestrator")
+AGENTS=("picky-design" "picky-security" "picky-tester" "picky-performance" "picky-orchestrator" "picky-landingpage")
 
 echo "🔍 Picky Skills Installer"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -22,12 +22,6 @@ install_agents() {
             count=$((count + 1))
         fi
     done
-    # landingpage has SKILL.md but may not have agent.md yet
-    if [ -f "$SCRIPT_DIR/picky-landingpage/agent.md" ]; then
-        rm -f "$target_dir/picky-landingpage.md"
-        ln -sf "$SCRIPT_DIR/picky-landingpage/agent.md" "$target_dir/picky-landingpage.md"
-        count=$((count + 1))
-    fi
     echo "  ✅ Installed $count agents for $label → $target_dir"
 }
 
@@ -38,6 +32,9 @@ install_skills() {
     local count=0
     for skill in "${SKILLS[@]}"; do
         if [ -d "$SCRIPT_DIR/$skill" ]; then
+            if [ -e "$target_dir/$skill" ]; then
+                echo "  Updating existing installation..."
+            fi
             rm -rf "$target_dir/$skill"
             ln -sf "$SCRIPT_DIR/$skill" "$target_dir/$skill"
             count=$((count + 1))
@@ -51,7 +48,7 @@ HAS_CLAUDE=false
 HAS_CURSOR=false
 HAS_KIRO=false
 
-[ -d "$HOME/.claude" ] || command -v claude &>/dev/null 2>&1 && HAS_CLAUDE=true
+[ -d "$HOME/.claude" ] || command -v claude &>/dev/null && HAS_CLAUDE=true
 [ -d "$HOME/.cursor" ] && HAS_CURSOR=true
 [ -d "$HOME/.kiro" ] && HAS_KIRO=true
 
@@ -62,6 +59,11 @@ echo "  2) Skills — injected into main conversation context"
 echo "  3) Both"
 echo ""
 read -p "Choose [1/2/3]: " mode
+
+if [[ ! "$mode" =~ ^[123]$ ]]; then
+    echo "Error: Invalid option '$mode'. Please enter 1, 2, or 3." >&2
+    exit 1
+fi
 
 echo ""
 
