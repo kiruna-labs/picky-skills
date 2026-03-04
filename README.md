@@ -1,6 +1,6 @@
 # 🔍 Picky Skills
 
-**Skills and sub-agents to run exhaustive UX, security, performance, and general QA audits that help ensure your coding projects are ready for primetime by spinning up dozens of parallel, deep investigations into key quality areas.**
+**Skills and sub-agents that help run exhaustive UX, security, performance, and QA audits to ensure your coding projects are ready for primetime by spinning up dozens of parallel, deep investigations into key quality areas.**
 
 Most audits sample a few narrow issues. Picky skills are pushing your agent to check every component, endpoint, and perspective your end users care about — and give you a detailed breakdown of triaged issues it identified so your coding agent can act on them together with you.
 
