@@ -1,8 +1,8 @@
 # 🔍 Picky Skills
 
-**Exhaustive code audits that count everything, locate everything, and fix everything.**
+**Skills and sub-agents to run exhaustive UX, security, performance, and general QA audits that help ensure your coding projects are ready for primetime by spinning up dozens of parallel, deep investigations into key quality areas.**
 
-Most audits sample a few files and say "some issues found." Picky skills check *every* component, *every* endpoint, *every* pixel — and give you exact counts, exact `file:line` locations, and exact fixes.
+Most audits sample a few narrow issues. Picky skills are pushing your agent to check every component, endpoint, and perspective your end users care about — and give you a detailed breakdown of triaged issues it identified so your coding agent can act on them together with you.
 
 ```bash
 git clone https://github.com/kiruna-labs/picky-skills.git ~/picky-skills
@@ -119,24 +119,12 @@ ln -s ~/picky-skills/picky-landingpage ~/.claude/skills/
 
 ## Usage
 
-### Automatic (Claude detects intent)
-
-```
-"Review this PR for security issues"          → picky-security
-"Check the design consistency"                 → picky-design
-"Test the login flow"                          → picky-tester
-"Is this page fast enough?"                    → picky-performance
-"Optimize this landing page for conversions"   → picky-landingpage
-"Audit everything before we launch"            → picky-orchestrator
-```
-
 ### Explicit
 
 ```
-"Run a picky security audit on src/api/"
-"Have picky-design check button consistency"
-"Use picky-tester on http://localhost:3000"
-"Run picky-landingpage on https://myproduct.com"
+"/picky-security Run an extensive audit on src/api/"
+"/picky-design Check my project for accessibility and UX best practices"
+"/picky-landingpage Analyze our landing pages for SEO and other improvement potentials"
 ```
 
 ### Parallel & background
@@ -145,6 +133,10 @@ ln -s ~/picky-skills/picky-landingpage ~/.claude/skills/
 "Run picky-security and picky-performance in parallel"
 "Run picky-design in the background"
 ```
+
+Note that coding agents like Claude Code sometimes cut the work short and don't complete the analysis entirely even though the skills tell it to. Therefore, run it a few times especially for new projects.
+
+In case of major findings, it often helps to double/triple check them by using the exceptional counselors skill to spin up parallel investigations using multiple coding agents (https://github.com/aarondfrancis/counselors).
 
 ---
 
