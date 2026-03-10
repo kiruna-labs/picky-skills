@@ -12,14 +12,23 @@ cd ~/picky-skills && ./install.sh
 Then in Claude Code:
 
 ```
-> Run a picky design audit on this project
+> /picky-security     Extensive security audit - vulnerabilities, auth, API security, secrets, deps
+> /picky-design       Extensive UI, UX, and accessibility audit
+> /picky-performance  Extensive performance audit - Core Web Vitals, caching, runtime, backend, etc.
+> /picky-tester       Black-box QA from over 10 different user perspectives using Chrome Dev tools or Playwright
+> /picky-landingpage  SEO audit including conversion optimization, copy, social proof, pricing, etc.
 ```
 
 ---
 
 ## 30-Second Demo
 
-Here's what a picky audit actually produces (abbreviated):
+Demo for /picky-tester which spins up >10 different testing personas that use your app using Chrome Dev tools and log any issues the find along the way.
+
+https://github.com/user-attachments/assets/506677b0-32fa-435b-9e88-ac9b979a3722
+
+
+Here's what a picky audit actually produces (abbreviated example for /picky-design audit):
 
 ```
 📊 DESIGN AUDIT — acme-dashboard
@@ -47,21 +56,6 @@ TOP 3 QUICK WINS
   2. Replace 8 hardcoded #3b82f6 → fixes 8 findings
   3. Add aria-label to icon buttons → fixes 4 critical findings
 ```
-
----
-
-## Skills
-
-| Skill | What it audits | Trigger phrases |
-|-------|---------------|-----------------|
-| **[picky-design](./picky-design/)** | UI consistency, design tokens, accessibility (WCAG 2.2), responsive | "design audit", "accessibility audit" |
-| **[picky-security](./picky-security/)** | Vulnerabilities, auth, API security, secrets, deps (OWASP/CWE) | "security audit", "vulnerability scan" |
-| **[picky-tester](./picky-tester/)** | Black-box QA from a real user's perspective | "test this app", "QA testing" |
-| **[picky-performance](./picky-performance/)** | Bundle size, Core Web Vitals, caching, runtime, backend | "performance audit", "why is this slow" |
-| **[picky-landingpage](./picky-landingpage/)** | Conversion optimization, copy, social proof, SEO, pricing | "landing page audit", "CRO audit" |
-| **[picky-orchestrator](./picky-orchestrator/)** | Coordinates all audits into unified report | "full audit", "audit everything" |
-
-Every skill produces a **scored report** with exact counts, `file:line` references, severity classifications, and copy-paste fixes.
 
 ---
 
@@ -122,16 +116,16 @@ ln -s ~/picky-skills/picky-landingpage ~/.claude/skills/
 ### Explicit
 
 ```
-"/picky-security Run an extensive audit on src/api/"
-"/picky-design Check my project for accessibility and UX best practices"
-"/picky-landingpage Analyze our landing pages for SEO and other improvement potentials"
+/picky-security Run an extensive audit on src/api/
+/picky-design Check my project for accessibility and UX best practices
+/picky-landingpage Analyze our landing pages for SEO and other improvement potentials
 ```
 
 ### Parallel & background
 
 ```
-"Run picky-security and picky-performance in parallel"
-"Run picky-design in the background"
+Run picky-security and picky-performance in parallel
+Run picky-design in the background
 ```
 
 Note that coding agents like Claude Code sometimes cut the work short and don't complete the analysis entirely even though the skills tell it to. Therefore, run it a few times especially for new projects.
