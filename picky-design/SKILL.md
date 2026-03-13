@@ -35,6 +35,14 @@ description: Ultra-thorough design system and UI audit. Checks every component f
 
 ---
 
+## Execution Rules (CRITICAL — Prevents "Cannot resume agent" Errors)
+
+- **Launch ONE picky-design agent that handles ALL phases.** Do NOT split phases (colors, typography, spacing, accessibility, etc.) into separate sub-agents. The agent runs all phases sequentially.
+- **If using `run_in_background: true`:** Do NOT call `resume` on the agent. You will be automatically notified when it completes. Calling resume on a running agent causes errors.
+- **Never poll or sleep-and-check.** Wait for the automatic completion notification.
+
+---
+
 ## Ultra-Thorough Audit Protocol
 
 ### Phase 1: Complete Discovery (Don't Skip Anything)

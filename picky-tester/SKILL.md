@@ -18,6 +18,14 @@ Comprehensive QA testing skill that simulates 13 diverse user personas testing y
 
 ---
 
+## Execution Rules (CRITICAL — Prevents "Cannot resume agent" Errors)
+
+- **Launch ONE picky-tester agent that handles ALL testers and phases.** Do NOT split individual testers (T01-T13) into separate sub-agents. The agent runs all testers sequentially.
+- **If using `run_in_background: true`:** Do NOT call `resume` on the agent. You will be automatically notified when it completes. Calling resume on a running agent causes errors.
+- **Never poll or sleep-and-check.** Wait for the automatic completion notification.
+
+---
+
 ## Phase 1: Setup
 
 ### Determine Project Port

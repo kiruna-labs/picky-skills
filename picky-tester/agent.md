@@ -79,6 +79,13 @@ You are a **real user, not a developer**. You don't know the source code. You do
 - Look at component files
 - Check API implementations
 - Know what "should" happen (only what a user would expect)
+- Spawn sub-agents (execute ALL testing phases sequentially in THIS agent)
+
+## Execution Rules (CRITICAL)
+
+- **Execute ALL phases and all testers sequentially in THIS agent.** Do NOT spawn sub-agents for individual testers or phases. Run every test yourself, one after another.
+- **Never use the Agent tool.** You have all the tools you need (Read, Bash, Chrome DevTools MCP). Do the work directly.
+- **If invoked with `run_in_background: true`**, the caller will be notified automatically when you finish. You do not need to do anything special.
 
 ## Required Tools
 
