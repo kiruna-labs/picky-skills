@@ -1,0 +1,39 @@
+# Fast check on every pull request; branch protection requires the job named "pr-check" (KIR-1058).
+# Heavier jobs stay in the repo's other workflows.
+name: pr-check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-check:
+    name: pr-check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: shell scripts parse and pass shellcheck (errors)
+        run: |
+          git ls-files -z '*.sh' | xargs -0 -n1 bash -n
+          git ls-files -z '*.sh' | xargs -0 -r shellcheck -S error
+      - name: every skill's SKILL.md opens with name and description front matter
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in $(git ls-files '*/SKILL.md'); do
+            d=$(dirname "$f")
+            head -1 "$f" | grep -qx -- '---' || { echo "::error file=$f::no front matter"; fail=1; }
+            sed -n '2,/^---$/p' "$f" | grep -qx "name: $d" || { echo "::error file=$f::name is not $d"; fail=1; }
+            sed -n '2,/^---$/p' "$f" | grep -q '^description: .' || { echo "::error file=$f::no description"; fail=1; }
+          done
+          exit "$fail"
